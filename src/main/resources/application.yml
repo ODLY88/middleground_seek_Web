@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: dev
+
+  thymeleaf:
+    view-names: /*
+    cache: false
+    prefix: /WEB-INF/html
+
+    jackson:
+      default-property-include: non_null

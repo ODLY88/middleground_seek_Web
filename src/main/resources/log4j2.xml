@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <!-- 控制台输出 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <!-- 文件输出，记录到 logs/app.log -->
+        <RollingFile name="RollingFileLogger" fileName="logs/app.log"
+                     filePattern="logs/app-%d{yyyy-MM-dd}-%i.log"
+                     maxSize="10MB"
+                     maxIndex="30">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <!-- 按大小轮转 -->
+                <SizeBasedTriggeringPolicy size="10MB"/>
+                <!-- 按日期轮转 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+
+        <!-- 异步日志，用于提高性能 -->
+        <Async name="AsyncLogger">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileLogger"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <!-- 根日志配置 -->
+        <Root level="info">
+            <AppenderRef ref="AsyncLogger"/> <!-- 使用异步日志 -->
+        </Root>
+
+        <!-- 针对特定包的日志配置 -->
+        <Logger name="com.baomidou.mybatisplus.mapper" level="TRACE" additivity="false">
+            <AppenderRef ref="AsyncLogger"/> <!-- 使用异步日志 -->
+        </Logger>
+    </Loggers>
+</Configuration>
